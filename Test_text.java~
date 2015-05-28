@@ -1,0 +1,56 @@
+import extensions.*;
+
+class Test extends Program {
+    boolean finished = false;
+    int[][] tab = new int[20][30];
+    i = 19;
+    j = 15;
+    tab[18][15] = 1;
+    tab[19][16] = 1;
+    tab[19][14] = 1;
+    
+
+    void algorithm() {
+	enableKeyTpedInConsole(True);
+	while (!finished)
+	    my_try()
+	    }
+
+
+    void my_try() {
+	int k;
+	
+	for (int i = 0; i < 20 ; ++i) {
+	    for (int j = 0; j < 30 ; ++j) {
+		if (tab[i][j] == 0)
+		    print("_");
+		else
+		    print("|");
+	    }
+	    println();
+	}
+    }
+    void keyTypedInConsole(int key) {
+	switch (key) {
+	case ANSI_UP:
+	    clearScreen;
+	    tab[i - 1][j] = 0;
+	    tab[i][j + 1] = 0;
+	    tab[i][j - 1] = 0;
+	    i = i - 1;
+	    tab[i - 1][j] = 1;
+	    tab[i][j + 1] = 1;
+	    tab[i][j - 1] = 1;
+	    break;
+	case ANSI_DOWN:
+	    clearScreen;
+	    tab[i - 1][j] = 0;
+	    tab[i][j + 1] = 0;
+	    tab[i][j - 1] = 0;
+	    i = i + 1;
+	    tab[i - 1][j] = 1;
+	    tab[i][j + 1] = 1;
+	    tab[i][j - 1] = 1;
+	}
+    }
+}
