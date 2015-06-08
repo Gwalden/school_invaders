@@ -1,0 +1,20 @@
+
+
+
+
+class Test extends Program 
+{
+
+
+    class Alien 
+    {
+	int[] alien = new int[10];
+	int[] coord = new int[2];
+    } 
+    Alien[] my_tab = new Alien()[5];
+    void algorithm() 
+    {
+	my_tab[0].alien[0] = 3;
+	println(	my_tab[0].alien[0] = 3);
+    }
+}
