@@ -2,31 +2,32 @@ import extensions.*;
 
 class Main extends Program 
 {
-    CSVFile file = loadCSV("my_questions_math.csv");
-    String[][] save = new String[rowCount(file)][columnCount(file)];
+    CSVFile		file = loadCSV("my_questions_math.csv");
+    String[][]		save = new String[rowCount(file)][columnCount(file)];
     TransparentImage	vaisseau = newTransparentImage("Vaisseau","vaisseau.png");
     TransparentImage	img = newTransparentImage(600, 300);
     TransparentImage	ship = newTransparentImage(200,200);
-    int		i = 250;
+    int			i = 250;
     TransparentImage	tir = newTransparentImage("Tir","tir.png");
-    Alien[] my_tab = new Alien[50];
-    int lives = 10;
-
+    Alien[]		my_tab = new Alien[50];
+    int			lives = 10;
+    int			j = 1;
+    int			l = 1;
 
     class Check 
     {
-	boolean	hit;
-	int[] new_coord = new int[2];
-	
+	boolean		hit;
+	int		numb;
+	int[]		new_coord = new int[2];	
     }
 
     class Alien 
     {
-	int alien;
-	int[] coord = new int[2];
+	int		alien;
+	int[]		coord = new int[2];
     }
 
-    void	algorithm()
+    void		algorithm()
     {
 	for (int i = 0; i< my_tab.length; ++i)
 	    my_tab[i] = new Alien();
@@ -34,7 +35,7 @@ class Main extends Program
 	my_game();
     }
 
-    String[][] my_pars() {	
+    String[][]		my_pars() {	
 	for (int i = 0; i < rowCount(file) ; ++i) {
 	    for (int j = 0 ; j < columnCount(file,i); ++j) {
 		save[i][j] = getCell(file,i,j);
@@ -43,28 +44,30 @@ class Main extends Program
 	return save;
     }
 
-    Alien[]	my_alien() 
+    Alien[]		my_alien() 
     {
-	int rand =  (int)random() * 5;
+	int		rand =  (int)random() * 5;
 	for (int i = 0; i < my_tab.length; ++i)
 	    {
 		if (i != rand)
 		    {
 			my_tab[i] = new Alien();
-			my_tab[i].alien = my_err(Integer.parseInt(save[1][1]));
+			my_tab[i].alien = my_err(Integer.parseInt(save[j][l]));
 		    }
 		else
-		    my_tab[i].alien = Integer.parseInt(save[1][1]);
+		    my_tab[i].alien = Integer.parseInt(save[j][l]);
 	    }
 	return my_tab;
     }
+    
     /// Fonction permettant de retourner un nombre aleatoire que l'on va mettre dans les "faux" aliens
-    int		my_err(int rez) {
+    int			my_err(int rez) {
 	return ((int) (random() * 5) + rez);
     }
 
-    int		check_tab(int[] tab) {
-	int i = length(tab) - 1;
+    int			check_tab(int[] tab) {
+	int		i = length(tab) - 1;
+
 	for (; i != 0 || tab[i] == 0; --i);
 	if (i == 0 && tab[i] != 0)
 	    return (1);
@@ -72,18 +75,31 @@ class Main extends Program
 	    return (-1);
     }
 
-    void	my_game() 
+    void		my_game() 
     {	
 	my_pars();
-      	copyAndResize(vaisseau, "vaisseau-small",50,50);
+	copyAndResize(vaisseau, "vaisseau-small",50,50);
 	drawImage(img, copyAndResize(vaisseau, "vaisseau-small",50,50), 300, 250);
 	my_aff(my_alien());
-	printStruct();
+	print_question();
 	show(img);
+	// if (lives > 0)
+	//     {
+		
+	// 	my_game();
+	//     }
 	while(true);
     }
 
-    void	printStruct()
+    void		print_question()
+    {
+	println(save[j][0]);
+	if (save[j].length > 2)
+	    for (int i = 0; i < 4; ++j) 
+		println("Reponse " + i + ")" +  save[j][i]);		
+    }
+
+    void		printStruct()
     {
 	for (int i = 0; i != 50; ++i)
 	    {
@@ -91,10 +107,9 @@ class Main extends Program
 		println(my_tab[i].alien);
 		println(my_tab[i].coord[0] + "    " + my_tab[i].coord[1]);
 	    }
-	
     }
 
-    void	my_aff(Alien[] my_tab) 
+    void		my_aff(Alien[] my_tab) 
     {
 	int a = 10;
 	int b = 20; 
@@ -117,14 +132,16 @@ class Main extends Program
 	    }
     }
 
-    String toString(int err) 
+    String		toString(int err) 
     {
 	String res = "";
 	res = res + err;
 	return res;
     }
-    int count = 0;
-    void keyChanged(char c, String event) 
+
+    int			count = 0;
+
+    void		keyChanged(char c, String event) 
     {
 	if (c == 'q')
 	    {
@@ -149,7 +166,7 @@ class Main extends Program
 		drawRect(img, 300, 250, 50, 50);
 		fillRect(img, 300, 250, 50, 50);
 	    }	
-	if (c == ' ') 
+	if (c == ' ')
 	    {
 		count = count + 1;
 		if (count == 3)
@@ -170,46 +187,114 @@ class Main extends Program
 			    }
 			if (my_check.hit)
 			    {
-				setColor(img,RGBColor.BLACK);
-				fillRect(img, my_check.new_coord[0], my_check.new_coord[1], 35 , 35);
+				if (my_tab[my_check.numb].alien == Integer.parseInt(save[j][l]))
+				    {
+					println("VOUS AVEZ PERDU UNE VIE");
+					lives = lives - 1;
+					my_tab[my_check.numb].alien = 0;
+				    }
+				else
+				    {
+					my_tab[my_check.numb].alien = 0;
+					setColor(img,RGBColor.BLACK);
+					fillRect(img, my_check.new_coord[0], my_check.new_coord[1], 35 , 35);
+					if (check_tab())
+					    {
+						println("BRAVO NIVEAU REUSSI !");
+						l = l + 2;
+						j = j + 2;
+					    }
+				    }
 			    }
 		    }
 	    }
+	if (c == 'x')
+	    {
+		count = count + 1;
+		if (count == 3)
+		    {
+			count = 0;
+			println("SPACE");
+			Check my_check = new Check();
+			my_check.hit = false;
+			my_check = check_coord(i, my_check);
+			int traj = 300;
+			while(traj != 0)
+			    {
+		       
+				drawImage(img, copyAndResize(tir, "tir-small",1,1), i + 10, traj);
+				setColor(img, RGBColor.WHITE);
+				fillRect(img, i, i, 1, 1);
+				traj = traj - 50;
+			    }
+			if (my_check.hit)
+			    {
+				println(my_tab[my_check.numb].alien);
+				if (my_tab[my_check.numb].alien == Integer.parseInt(save[j][l])) 
+				    {
+					println("UNE CIBLE DE SAUVEE ");
+					setColor(img,RGBColor.BLUEVIOLET);
+					fillRect(img, my_check.new_coord[0], my_check.new_coord[1], 35 , 35);
+					my_tab[my_check.numb].alien = 0;
+
+				    }
+				else
+				    {
+					my_tab[my_check.numb].alien = 0;
+					println("WRONG TARGET ! -1");
+					lives = lives - 1;
+					setColor(img,RGBColor.BLACK);
+					fillRect(img, my_check.new_coord[0], my_check.new_coord[1], 35 , 35);
+					if (check_tab())
+					    {
+						println("BRAVO NIVEAU REUSSI !");
+						l = l + 2;
+						j = j + 2;
+					    }
+				    }
+			    }
+		    }
+	    }
+	
+    }
+
+    boolean    		check_tab() 
+    {
+	for (int i = 0; i != 50; ++i)
+	    {
+		if (my_tab[i].alien != Integer.parseInt(save[j][l]))
+		    return false;
+	    }
+	return true;
     }
  
-	Check	check_coord(int i, Check if_hit) 
-	{
-	    int col = 0;
-	    for (int k = 49; k != 0 ; --k) 
-		{
-		    if (i >= my_tab[k].coord[0] && i <= (my_tab[k].coord[0] + 10))
-			{
-			    for (; my_tab[k].alien == 0; k = k - 10);
-			    if (my_tab[k].alien == Integer.parseInt(save[1][1]))
-				{
-				    println("VOUS AVEZ PERDU UNE VIE");
-				    lives = lives - 1;
-				    my_tab[k].alien = 0;
-				}
-			    my_tab[k].alien = 0;
-			    if_hit.hit = true;
-			    if_hit.new_coord[0] = my_tab[k].coord[0];
-			    if_hit.new_coord[1] = my_tab[k].coord[1];
-			    println(if_hit.new_coord[0]);
-			    println(if_hit.new_coord[1]);
-			    return if_hit;
-			}
-		}
-	    if_hit.hit = false;
-	    return if_hit;
-	}
-
-	void mouseHasMoved(int x, int y) {
-
-	}
-	void mouseHasChanged(String name, int x, int y, int button, String event){
-
-	}
-	void mouseChanged(String name, int x, int y, int button, String event) {
-	}
+    Check	       	check_coord(int i, Check if_hit) 
+    {
+	int col = 0;
+	for (int k = 49; k != 0 ; --k) 
+	    {
+		if (i >= my_tab[k].coord[0] && i <= (my_tab[k].coord[0] + 10))
+		    {
+			for (; my_tab[k].alien == 0; k = k - 10);
+			if_hit.hit = true;
+			if_hit.new_coord[0] = my_tab[k].coord[0];
+			if_hit.new_coord[1] = my_tab[k].coord[1];
+			if_hit.numb = k;
+			println(if_hit.new_coord[0]);
+			println(if_hit.new_coord[1]);
+			return if_hit;
+		    }
+	    }
+	if_hit.hit = false;
+	return if_hit;
     }
+
+    void		mouseHasMoved(int x, int y) {
+
+    }
+    void		mouseHasChanged(String name, int x, int y, int button, String event){
+	    
+    }
+    void		mouseChanged(String name, int x, int y, int button, String event) {
+    }
+}
