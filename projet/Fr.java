@@ -1,10 +1,15 @@
 import extensions.*;
+import java.awt.Dimension;
 
 class Fr extends Program {
+
+    Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    int hauteur = (int)tailleEcran.getHeight();
+    int largeur = (int)tailleEcran.getWidth();
     String[][] save ;
     String eventClicked = "";
-    TransparentImage img = newTransparentImage(600, 300);
-    TransparentImage vaisseau = newTransparentImage("Vaisseau","vaisseau.png");
+    TransparentImage img = newTransparentImage(largeur/2, hauteur/2);
+    TransparentImage vaisseau = newTransparentImage("Vaisseau","vaiss.png");
     TransparentImage tir = newTransparentImage("Tir","tir.png");
     TransparentImage logo = newTransparentImage("logo","logonew.png");
     TransparentImage wall = newTransparentImage("wall","wallmenu.jpg");
@@ -19,40 +24,32 @@ class Fr extends Program {
     int	l = 1;
     int[] my_answ;
     boolean finished = true;
-    Alien[]		my_tab = new Alien[50];
+    Alien[] my_tab = new Alien[50];
     
     class Check 
     {
-	boolean		hit;
-	int		numb;
-	int[]		new_coord = new int[2];	
+	boolean	hit;
+	int numb;
+	int[] new_coord = new int[2];
     }
 
     class Alien 
     {
-	int		alien;
-	int[]		coord = new int[2];
+	int alien;
+	int[] coord = new int[2];
     }
   
-
     void algorithm()
     {
        	menu();
-	if (mat == 1)
-	    my_pars("Francais.csv");
-	if (mat == 2)
-	    {
-		println("hudhqazed");
-		my_pars("Histoire.csv");
-	    }
-	if (mat == 3)
-	    my_pars("Maths.csv");
-	while(finished){
-	    if(eventClicked == "francais"){
-		french();
-		eventClicked = ""; 
-	    }
-	}
+	// if (mat == 1)
+	//     my_pars("Francais.csv");
+	// if (mat == 2)
+	//     my_pars("Histoire.csv");
+	// if (mat == 3)
+	//     my_pars("Maths.csv");
+	while(finished)
+	    {}
     }
 
     /// Fonction permettant de recuperer les informations du CSV.File dans un tableau 
@@ -62,14 +59,16 @@ class Fr extends Program {
 	for (int i = 0; i < rowCount(file) ; ++i) {
 	    for (int j = 0 ; j < columnCount(file,i); ++j) {
 		save[i][j] = getCell(file,i,j);
+		println(save[i][j]);
 	    }
 	}
 	return save;
     }
 
-
+    ///Fonction affichant le menu du jeu
     void menu()
     {
+	my_pars("Maths.csv");
 	int i = 100;
 	int j = 50;
 	drawImage(img,wall,0,0);
@@ -80,6 +79,7 @@ class Fr extends Program {
 	show(img);
     }
 
+    ///Fonction qui permet d'ajouter les zones des differents mode de jeu (pour pouvoir choisir grace au clic de la souris).
     void add_button(String str,int x, int y, int i, int j){
 	if(equals(str,"Math") == true){
 	    addZone(img,str,x,y,i,j);
@@ -95,32 +95,44 @@ class Fr extends Program {
 	}
     }
 
+    /// Lancement du mode de jeu Francais
     void french()
     {
-	fill(img, RGBColor.BLACK);
+	my_pars("Francais.csv");
 	drawImage(img,wall,0,0);
 	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);	
 	finished = true;
 	setColor(img,RGBColor.WHITE);
-	drawRect(img, 50, 100, 100, 70);       
-	drawRect(img, 200, 100, 100, 70);
-	drawRect(img, 350, 100, 100, 70);
-	show(img);
-    }
-
-    void histoire() {
-	my_pars("Histoire.csv");
-	drawImage(img,wall,0,0);
-	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);
-	finished = true;
-	setColor(img,RGBColor.WHITE);
+	add_question();
 	drawRect(img, 50, 100, 100, 70);       
 	drawRect(img, 200, 100, 100, 70);
 	drawRect(img, 350, 100, 100, 70);
 	printValue();
 	show(img);
     }
-  
+
+    void add_question()
+    {
+	drawRect(img,140,25,400,50);
+	drawString(img,save[j-1][0],150,50);
+    }
+
+    ///Lancement du mode de jeu Histoire
+    void histoire() {
+	my_pars("Histoire.csv");
+	drawImage(img,wall,0,0);
+	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);
+	finished = true;
+	setColor(img,RGBColor.WHITE);
+	add_question();
+	drawRect(img, 50, 100, 100, 70);       
+	drawRect(img, 200, 100, 100, 70);
+	drawRect(img, 350, 100, 100, 70);
+	printValue();
+	show(img);
+    }
+
+    ///Fonction permettant l'affichage des bonnes ou mauvaises reponses sur l'image
     void printValue()
     {
 	if (equals(save[j - 1][1], save[j][1]))
@@ -134,8 +146,10 @@ class Fr extends Program {
 	drawString(img, save[j - 1][3], 370, 120);
     }
 
+    ///Lancement du mode de jeu math
     void maths() 
     {
+	my_pars("Maths.csv");
 	finished = true;
 	setColor(img, RGBColor.BLACK);
 	fillRect(img, 0, 0, 600, 300);
@@ -146,8 +160,9 @@ class Fr extends Program {
 	my_answ = fill_tab();
 	show(img);
     }
-    
-    Alien[]		my_alien() 
+
+    ///Fonction permettant de remplir toutes les bonnes et mauvaises reponses
+    Alien[]		my_alien()
     {
 	int	rand =  (int)random() * 10;
 	for (int i = 0; i < my_tab.length; ++i)
@@ -213,6 +228,7 @@ class Fr extends Program {
 	    }
     }
     
+    ///Fonction transformant un int en string
     String		toString(int err) 
     {
 	String res = "";
@@ -220,25 +236,26 @@ class Fr extends Program {
 	return res;
     }
     
- int count = 0;
+    int count = 0;
 
+    ///Fonction qui gere les evenements du clavier, avec c = la lettre rentree et event = l'evenement.
     void	keyChanged(char c, String event)
     {
 	if (c == 'q' && (mat == 1 ||mat == 2 || mat == 3))
 	    {
 		setColor(img, RGBColor.BLACK);
-		drawRect(img, i + 10, 250, 50, 50);
-		fillRect(img, i + 10, 250, 50, 50);
+		drawRect(img, i + 10, 250, 100, 100);
+		fillRect(img, i + 10, 250, 100, 100);
 		i -= 5;
-		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",50,50), i, 250);
+		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), i, 250);
 	    }
 	if (c == 'd' && (mat == 1 ||mat == 2 || mat == 3))
 	    {
 		setColor(img, RGBColor.BLACK);
-		drawRect(img, i - 10, 250, 50, 50);
-		fillRect(img, i - 10, 250, 50, 50);
+		drawRect(img, i - 10, 250, 100, 100);
+		fillRect(img, i - 10, 250, 100, 100);
 		i += 5;
-		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",50,50), i, 250);
+		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), i, 250);
 	    }
 	if (c == ' ' && (mat == 1 || mat == 2))
 	    tirHistFr();
@@ -248,6 +265,7 @@ class Fr extends Program {
 	    capture();
     }
 
+    ///Fonction gerant le tir dans le mode math
     void tirMath() 
     {
 	count = count + 1;
@@ -278,7 +296,8 @@ class Fr extends Program {
 		    }		    
 	    }
     }
-    
+
+    ///fonction gerant la capture des bonnes reponses dans le mode math
     void capture() 
     {
 	count = count + 1;
@@ -314,6 +333,7 @@ class Fr extends Program {
 	    }
     }
 
+    ///Fonction permettant de renvoyer une structures avec les coordonnees de l'objet touche, avec i la position du vaisseau, et if_hit la structure ayant les nouvelles coordonnees.
     Check check_coord(int i, Check if_hit) 
     {
 	int col = 0;
@@ -335,16 +355,19 @@ class Fr extends Program {
 	return if_hit;
     }
 
+    ///Fonction permettant de savoir si le joueur est toujours en vie
     void check_lives()
     {
         if (lives == 0)
 	    {
 		TransparentImage game_over = newTransparentImage("END","game_over.jpg");
 		drawImage(img,copyAndResize(game_over, "game_over_small",600,300),0,0);
-	    }
-	    
+		j = (j - 1) / 2;
+		println("Vous avez reussi a atteindre le niveau " + j); 
+	    }    
     }
 
+    ///fonction permettant de savoir si le joueur a gagne ou pas
     void check_win()
     {
 	for (int i = 0; i != length(my_answ) ; ++i)
@@ -359,6 +382,7 @@ class Fr extends Program {
 	maths();
     }
 
+    ///Fonction permettant de vider les structures avant le passage du niveau supplementaire
     void		empty_struct()
     {
 	int[] vide = new int[length(my_answ)];
@@ -367,17 +391,18 @@ class Fr extends Program {
 	my_tab = empty;
     }
 
+    ///Fonction gerant les animations du tir
     void animeTir(int nb)
     {
 	int traj = 300;
 	while(traj > nb)
 	    {       
-		drawImage(img, copyAndResize(tir, "tir-small",1,10), i + 20, traj);
+		drawImage(img, copyAndResize(tir, "tir-small",1,10), i + 40, traj);
 		traj = traj - 20;
 	    }
     }
-    
-    //   count = 0;
+
+    ///Fonction gerant le tir dans le mode Histoire et Francais
     void tirHistFr()
     {
 	count = count + 1;
@@ -390,59 +415,68 @@ class Fr extends Program {
 		else
 		    {
 			animeTir(100);
-			if (check_who_touch() && mat == 2)
+			if (mat == 2 &&check_who_touch())
 			    {
 				j = j + 2;
 				histoire();
 			    }
-			if (check_who_touch() && mat == 1)
+			else if (mat == 1 && check_who_touch())
 			    {
 				j = j + 2;
 				french();
 			    }
-			
 		    }
 	    }
     }
        
+    ///Fonction permettant de voir si le joueur a touche une bonne reponse ou pas, et agir en consequence
     boolean	check_who_touch()
     {
-	if (rez == 1 && (i >= 50 && i <= 150))
+	if (rez == 1)
 	    {
-		println("Bonne Reponse !");
-		return true;
+		if (i >= 50 && i <= 150) {
+		    println("Bonne Reponse !");
+		    return true;
+		}
+		else if ( rez == 1 && (i >= 200 && i <= 300) || (i >= 350 && i <= 450))
+		    {
+			lives = lives - 1;
+			println("Mauvaise cible ! Il vous reste "+lives +" vies");
+			check_lives();
+		    }
 	    }
-	else if ((i >= 200 && i <= 300) || (i >= 350 && i <= 450))
+	if (rez == 2) 
 	    {
-		lives = lives - 1;
-		println("Mauvaise cible ! Il vous reste "+lives +" vies");
-		check_lives();
-	    }
-	if (rez == 2 && (i >= 200 && i <= 300))
-	    {
-		println("Bonne Reponse !");
-		return true;
-	    }
-	else if ((i >= 50 && i <= 150) || (i >= 350 && i <= 450))
-	    {
-		lives = lives - 1;
-		println("Mauvaise cible ! Il vous reste "+lives +" vies");
-		check_lives();
-	    }
-	if (rez == 3 && (i >= 350 && i <= 450))
-	    {
-		println("Bonne Reponse !");
-		return true;
-	    }
-	else if ((i >= 200 && i <= 300) || (i >= 50 && i <= 150))
-	    {
-		lives = lives - 1;
-		println("Mauvaise cible ! Il vous reste "+lives +" vies");
-		check_lives();
-	    }
-	return false;
-    }
+		if(i >= 200 && i <= 300)
+		    {
+			println("Bonne Reponse !");
+			return true;
+		    }
+		else if ((i >= 50 && i <= 150) || (i >= 350 && i <= 450))
+		    {
+			lives = lives - 1;
+			println("Mauvaise cible ! Il vous reste "+lives +" vies");
+			check_lives();
+		    }
 
+	    }
+	if (rez == 3)
+	    {
+		if (i >= 350 && i <= 450) {
+		    println("Bonne Reponse !");
+		    return true;
+		}
+		else if ((i >= 200 && i <= 300) || (i >= 50 && i <= 150))
+		    {
+			lives = lives - 1;
+			println("Mauvaise cible ! Il vous reste "+lives +" vies");
+			check_lives();
+		    }
+	    }
+	 return false;
+    }
+    
+    ///Fonction permettant de savoir si le joueur a touche un des rectangles contenant les reponses
     boolean check_touch()
     {
 	println(i);
@@ -455,6 +489,8 @@ class Fr extends Program {
     }
     void	mouseHasChanged(String name, int x, int y, int button, String event){
     }
+
+    ///Fonction qui permet de gerer les clics de la souris, avec name = nom de la zone, x et y les coordonnees, button = le nom du boutton utilise avec la souris, et event l'evenement.
     void	mouseChanged(String name, int x, int y, int button, String event) {
 	if (equals(name,"Francais") && button == 1 && event == "PRESSED") 
 	    {
