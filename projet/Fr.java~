@@ -1,0 +1,163 @@
+import extensions.*;
+
+class Fr extends Program {
+    int i = 250;
+    String eventClicked = "";
+    TransparentImage img = newTransparentImage(600, 300);
+     TransparentImage vaisseau = newTransparentImage("Vaisseau","vaisseau.png");
+    TransparentImage tir = newTransparentImage("Tir","tir.png");
+    int	rand = 0;
+    boolean finished = true;
+    TransparentImage logo = newTransparentImage("logo","logonew.png");
+    TransparentImage wall = newTransparentImage("wall","wallmenu.jpg");
+    TransparentImage fr = newTransparentImage("fr","Boutonfr.png");
+    TransparentImage Math = newTransparentImage("Math","Math.png");
+    TransparentImage Hist = newTransparentImage("Hist","Histoire.png");
+    
+
+    void algorithm()
+    {
+	menu();
+	while(finished){
+	    if(eventClicked == "francais"){
+		french();
+		eventClicked = ""; 
+	    }
+	}
+    }
+
+    void menu()
+    {
+	int i = 100;
+	int j = 50;
+	drawImage(img,wall,0,0);
+	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);
+	add_button("Math",100,120,i,j);
+	add_button("Francais",400,120,i,j);
+	add_button("Histoire",250,200,i,j);
+	show(img);
+    }
+
+    void add_button(String str,int x, int y, int i, int j){
+	if(equals(str,"Math") == true){
+	    addZone(img,str,x,y,i,j);
+	    drawImage(img,Math,x,y);
+	}
+	if(equals(str,"Francais") == true){
+	    addZone(img,str,x,y,i,j);
+	    drawImage(img,fr,x,y);
+	}
+	if(equals(str,"Histoire") == true){
+	    addZone(img,str,x,y,i,j);
+	    drawImage(img,Hist,x,y);
+	}
+    }
+
+    void french()
+    {
+	fill(img, RGBColor.BLACK);
+	drawImage(img,wall,0,0);
+	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);	
+	finished = true;
+	rand = (int) (random() * 3);
+	println(rand);
+	setColor(img,RGBColor.BLACK);
+	drawRect(img, 50, 100, 100, 70);       
+	println("jefill");
+	drawRect(img, 200, 100, 100, 70);
+	drawRect(img, 350, 100, 100, 70);
+	show(img);
+    }
+
+    int count = 0;
+
+    void	keyChanged(char c, String event)
+    {
+	if (c == 'q')
+	    {
+		setColor(img, RGBColor.BLACK);
+		drawRect(img, i + 10, 250, 50, 50);
+		fillRect(img, i + 10, 250, 50, 50);
+		i -= 5;
+		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",50,50), i, 250);
+	    }
+	if (c == 'd')
+	    {
+		setColor(img, RGBColor.BLACK);
+		drawRect(img, i - 10, 250, 50, 50);
+		fillRect(img, i - 10, 250, 50, 50);
+		i += 5;
+		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",50,50), i, 250);
+	    }
+	if (c == ' ')
+	    {
+		count = count + 1;
+		if (count == 3)
+		    {
+			count = 0;
+			int traj = 300;
+			if (!check_touch())
+			    {
+				while(traj != 0)
+				    {
+					drawImage(img, copyAndResize(tir, "tir-small",1,10), i + 20, traj);
+					traj = traj - 50;
+				    }
+			    }
+			else
+			    {
+				if (check_who_touch())
+				    french();
+			    }
+		    }
+	    }
+    }
+    
+    boolean	check_who_touch()
+    {
+	if (rand == 0 && (i >= 50 && i <= 150))
+	    {
+		println("Bonne Reponse !");
+		setColor(img, RGBColor.BLUEVIOLET);
+		drawRect(img,50,100,100,70);
+		return true;
+	    }
+	else if (rand == 1 && (i >= 200 && i <= 300))
+	    {
+		println("Bonne Reponse !");
+		setColor(img, RGBColor.BLUEVIOLET);
+		drawRect(img, 200, 100, 100, 70);
+		return true;
+	    }
+	else if (rand == 2 && (i >= 350 && i <= 450))
+	    {
+		println("Bonne Reponse !");
+		setColor(img, RGBColor.BLUEVIOLET);
+		drawRect(img, 350, 100, 100, 70);
+		return true;
+	    }
+	return false;
+    }
+
+    boolean check_touch()
+    {
+	println(i);
+	if ((i >= 50 && i <= 150) || (i >= 200 && i <= 300) || (i >= 350 && i <= 450))
+	    return true;
+	return false;
+    }
+
+    void	mouseHasMoved(int x, int y) {
+    }
+    void	mouseHasChanged(String name, int x, int y, int button, String event){
+    }
+    void	mouseChanged(String name, int x, int y, int button, String event) {
+	if (equals(name,"Francais") && button == 1 && event == "PRESSED") 
+	    {
+		finished = false;
+		println(finished);
+		//eventClicked = "francais";
+		french();
+	    }
+    }
+}
