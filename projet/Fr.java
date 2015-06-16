@@ -17,7 +17,7 @@ class Fr extends Program {
     TransparentImage Math = newTransparentImage("Math","Math.png");
     TransparentImage Hist = newTransparentImage("Hist","Histoire.png");
     int mat = 0;
-    int i = 250;
+    int i = 300;
     int lives = 10;
     int	rez = 0;
     int j = 1;
@@ -42,12 +42,6 @@ class Fr extends Program {
     void algorithm()
     {
        	menu();
-	// if (mat == 1)
-	//     my_pars("Francais.csv");
-	// if (mat == 2)
-	//     my_pars("Histoire.csv");
-	// if (mat == 3)
-	//     my_pars("Maths.csv");
 	while(finished)
 	    {}
     }
@@ -59,7 +53,6 @@ class Fr extends Program {
 	for (int i = 0; i < rowCount(file) ; ++i) {
 	    for (int j = 0 ; j < columnCount(file,i); ++j) {
 		save[i][j] = getCell(file,i,j);
-		println(save[i][j]);
 	    }
 	}
 	return save;
@@ -68,7 +61,6 @@ class Fr extends Program {
     ///Fonction affichant le menu du jeu
     void menu()
     {
-	my_pars("Maths.csv");
 	int i = 100;
 	int j = 50;
 	drawImage(img,wall,0,0);
@@ -98,36 +90,39 @@ class Fr extends Program {
     /// Lancement du mode de jeu Francais
     void french()
     {
+	printHeart();
 	my_pars("Francais.csv");
 	drawImage(img,wall,0,0);
 	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);	
 	finished = true;
 	setColor(img,RGBColor.WHITE);
 	add_question();
-	drawRect(img, 50, 100, 100, 70);       
-	drawRect(img, 200, 100, 100, 70);
-	drawRect(img, 350, 100, 100, 70);
+	drawRect(img, 50, 150, 150, 70);       
+	drawRect(img, 250, 150, 150, 70);
+	drawRect(img, 450, 150, 150, 70);
 	printValue();
 	show(img);
     }
 
     void add_question()
     {
-	drawRect(img,140,25,400,50);
+	drawRect(img,140,25,500,50);
 	drawString(img,save[j-1][0],150,50);
     }
 
     ///Lancement du mode de jeu Histoire
-    void histoire() {
+    void histoire() 
+    {
+	printHeart();
 	my_pars("Histoire.csv");
 	drawImage(img,wall,0,0);
 	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);
 	finished = true;
 	setColor(img,RGBColor.WHITE);
 	add_question();
-	drawRect(img, 50, 100, 100, 70);       
-	drawRect(img, 200, 100, 100, 70);
-	drawRect(img, 350, 100, 100, 70);
+	drawRect(img, 50, 150, 150, 70);       
+	drawRect(img, 250, 150, 150, 70);
+	drawRect(img, 450, 150, 150, 70);
 	printValue();
 	show(img);
     }
@@ -141,26 +136,47 @@ class Fr extends Program {
 	    rez = 2;
 	if (equals(save[j - 1][3], save[j][1]))
 	    rez = 3;
-	drawString(img, save[j - 1][1], 70, 120);
-	drawString(img, save[j - 1][2], 220, 120);
-	drawString(img, save[j - 1][3], 370, 120);
+	drawString(img, save[j - 1][1], 70, 190);
+	drawString(img, save[j - 1][2], 270, 190);
+	drawString(img, save[j - 1][3], 470, 190);
+    }
+
+    void questionMath()
+    {
+	setColor(img, RGBColor.GREEN);
+	drawRect(img,largeur/4 - 75,10,100,25);
+	drawString(img,save[j-1][1],largeur/4 - 70,25);
     }
 
     ///Lancement du mode de jeu math
-    void maths() 
+    void maths()
     {
 	my_pars("Maths.csv");
+	printHeart();
 	finished = true;
 	setColor(img, RGBColor.BLACK);
 	fillRect(img, 0, 0, 600, 300);
 	for (int i = 0; i< my_tab.length; ++i)
 	    my_tab[i] = new Alien();
-	drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), 300, 250);
+	drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), 300, 350);
+	questionMath();
 	my_aff(my_alien());
 	my_answ = fill_tab();
 	show(img);
     }
 
+    void checkFiles()
+    {
+	drawImage(img,wall,0,0);
+	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);
+	addZone(img,"Difficile",200, 200, 200, 100);
+	addZone(img,"Facile",500 , 200, 200, 100);
+	setColor(img, RGBColor.GREEN);
+	drawRect(img, 200, 200, 200, 100);
+	drawRect(img, 500 , 200, 200, 100);
+	drawString(img, "Difficile", 280, 250);
+	drawString(img, "Facile", 590, 250);
+    }
     ///Fonction permettant de remplir toutes les bonnes et mauvaises reponses
     Alien[]		my_alien()
     {
@@ -207,8 +223,8 @@ class Fr extends Program {
     /// Fonction affichant toutes les cases : Bonnes et mauvaises reponses
     void		my_aff(Alien[] my_tab) 
     {
-	int a = 10;
-	int b = 20; 
+	int a = 20;
+	int b = 50; 
 	int num = 0;
 	for (int i = 0; i != 5; ++i) 
 	    {
@@ -223,7 +239,7 @@ class Fr extends Program {
 			a += 60;
 			num = num + 1;
 		    }
-		a = 10;
+		a = 20;
 		b += 40;
 	    }
     }
@@ -244,18 +260,18 @@ class Fr extends Program {
 	if (c == 'q' && (mat == 1 ||mat == 2 || mat == 3))
 	    {
 		setColor(img, RGBColor.BLACK);
-		drawRect(img, i + 10, 250, 100, 100);
-		fillRect(img, i + 10, 250, 100, 100);
+		drawRect(img, i + 10, 350, 100, 100);
+		fillRect(img, i + 10, 350, 100, 100);
 		i -= 5;
-		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), i, 250);
+		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), i, 350);
 	    }
 	if (c == 'd' && (mat == 1 ||mat == 2 || mat == 3))
 	    {
 		setColor(img, RGBColor.BLACK);
-		drawRect(img, i - 10, 250, 100, 100);
-		fillRect(img, i - 10, 250, 100, 100);
+		drawRect(img, i - 10, 350, 100, 100);
+		fillRect(img, i - 10, 350, 100, 100);
 		i += 5;
-		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), i, 250);
+		drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), i, 350);
 	    }
 	if (c == ' ' && (mat == 1 || mat == 2))
 	    tirHistFr();
@@ -339,7 +355,7 @@ class Fr extends Program {
 	int col = 0;
 	for (int k = 49; k != 0 ; --k) 
 	    {
-		if (i >= my_tab[k].coord[0] && i <= (my_tab[k].coord[0] + 10))
+		if (i + 20 >= my_tab[k].coord[0] && i+20 <= (my_tab[k].coord[0] + 10))
 		    {
 			for (; my_tab[k].alien == 0 && k >=10; k = k - 10);
 			if_hit.hit = true;
@@ -358,13 +374,28 @@ class Fr extends Program {
     ///Fonction permettant de savoir si le joueur est toujours en vie
     void check_lives()
     {
+	printHeart();
         if (lives == 0)
 	    {
 		TransparentImage game_over = newTransparentImage("END","game_over.jpg");
-		drawImage(img,copyAndResize(game_over, "game_over_small",600,300),0,0);
+		drawImage(img,copyAndResize(game_over, "game_over_small",largeur/2,hauteur/2),0,0);
 		j = (j - 1) / 2;
 		println("Vous avez reussi a atteindre le niveau " + j); 
-	    }    
+	    }
+    }
+
+    void printHeart()
+    {
+	
+	setColor(img, RGBColor.BLACK);
+	drawRect(img, largeur/2 - 200, 60, 170, 90);
+	fillRect(img, largeur/2 - 200, 60, 170, 90);
+	if (mat == 1 || mat == 2)
+	    drawRect(img,140,25,500,50);
+	TransparentImage heart = newTransparentImage("heart","coeurdevie.png");
+	drawImage(img, copyAndResize(heart,"hear-smaller", 170, 90), largeur/2 - 200, 60);
+	setColor(img, RGBColor.WHITE);
+	drawString(img, toString(lives), largeur/2 -120, 60 + 45); 
     }
 
     ///fonction permettant de savoir si le joueur a gagne ou pas
@@ -383,7 +414,7 @@ class Fr extends Program {
     }
 
     ///Fonction permettant de vider les structures avant le passage du niveau supplementaire
-    void		empty_struct()
+    void empty_struct()
     {
 	int[] vide = new int[length(my_answ)];
 	my_answ = vide;	
@@ -396,8 +427,9 @@ class Fr extends Program {
     {
 	int traj = 300;
 	while(traj > nb)
-	    {       
-		drawImage(img, copyAndResize(tir, "tir-small",1,10), i + 40, traj);
+	    {
+		TransparentImage save = copyAndResize(tir, "tir-small",1,10);
+		drawImage(img,save , i + 40, traj);
 		traj = traj - 20;
 	    }
     }
@@ -432,13 +464,15 @@ class Fr extends Program {
     ///Fonction permettant de voir si le joueur a touche une bonne reponse ou pas, et agir en consequence
     boolean	check_who_touch()
     {
+	drawString(img,toString(rez),400,5);
+	println(rez);
 	if (rez == 1)
 	    {
-		if (i >= 50 && i <= 150) {
+		if (i >= 50 && i <= 200) {
 		    println("Bonne Reponse !");
 		    return true;
 		}
-		else if ( rez == 1 && (i >= 200 && i <= 300) || (i >= 350 && i <= 450))
+		else if (rez == 1 && (i >= 250 && i <= 400) || (i >= 450 && i <= 600))
 		    {
 			lives = lives - 1;
 			println("Mauvaise cible ! Il vous reste "+lives +" vies");
@@ -447,12 +481,12 @@ class Fr extends Program {
 	    }
 	if (rez == 2) 
 	    {
-		if(i >= 200 && i <= 300)
+		if(i >= 250 && i <= 400)
 		    {
 			println("Bonne Reponse !");
 			return true;
 		    }
-		else if ((i >= 50 && i <= 150) || (i >= 350 && i <= 450))
+		else if ((i >= 50 && i <= 200) || (i >= 450 && i <= 600))
 		    {
 			lives = lives - 1;
 			println("Mauvaise cible ! Il vous reste "+lives +" vies");
@@ -462,25 +496,25 @@ class Fr extends Program {
 	    }
 	if (rez == 3)
 	    {
-		if (i >= 350 && i <= 450) {
+		if (i >= 450 && i <= 600) {
 		    println("Bonne Reponse !");
 		    return true;
 		}
-		else if ((i >= 200 && i <= 300) || (i >= 50 && i <= 150))
+		else if ((i >= 250 && i <= 400) || (i >= 50 && i <= 200))
 		    {
 			lives = lives - 1;
 			println("Mauvaise cible ! Il vous reste "+lives +" vies");
 			check_lives();
 		    }
 	    }
-	 return false;
+	return false;
     }
     
     ///Fonction permettant de savoir si le joueur a touche un des rectangles contenant les reponses
     boolean check_touch()
     {
 	println(i);
-	if ((i >= 50 && i <= 150) || (i >= 200 && i <= 300) || (i >= 350 && i <= 450))
+	if ((i >= 50 && i <= 200) || (i >= 250 && i <= 400) || (i >= 450 && i <= 600))
 	    return true;
 	return false;
     }
@@ -510,10 +544,10 @@ class Fr extends Program {
 	    }
 	if (equals(name,"Math") && button == 1 && event == "PRESSED") 
 	    {
+		mat = 3;
 		removeAllZone(img);
 		finished = false;
-		mat = 3;
 		maths();
 	    }
-    }
+	}
 }
