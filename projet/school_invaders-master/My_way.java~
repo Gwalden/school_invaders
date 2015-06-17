@@ -45,13 +45,9 @@ class My_way extends Program {
 		cursor(0,0);
 		System.exit(1);
 		break;
-	    case ' ':
-		print("SPACE");
 	    }
 	cursor(k,l);
-	hide();
 	print("*");
 	delay(1);
-	//	println(key);
     }
 }

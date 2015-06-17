@@ -1,7 +1,7 @@
 import extensions.*;
 import java.awt.Dimension;
 
-class Fr extends Program {
+class Projet extends Program {
 
     Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     int hauteur = (int)tailleEcran.getHeight();
@@ -14,8 +14,9 @@ class Fr extends Program {
     TransparentImage logo = newTransparentImage("logo","logonew.png");
     TransparentImage wall = newTransparentImage("wall","wallmenu.jpg");
     TransparentImage fr = newTransparentImage("fr","Boutonfr.png");
-    TransparentImage Math = newTransparentImage("Math","Math.png");
-    TransparentImage Hist = newTransparentImage("Hist","Histoire.png");
+    TransparentImage math = newTransparentImage("Math","Math.png");
+    TransparentImage hist = newTransparentImage("Hist","Histoire.png");
+    TransparentImage vict = newTransparentImage("Vict","Victory.jpeg");
     int mat = 0;
     int i = 300;
     int lives = 10;
@@ -26,6 +27,7 @@ class Fr extends Program {
     boolean finished = true;
     Alien[] my_tab = new Alien[50];
     
+    ///Structure contenant les nouvelles coordonnes de l'objet touche et son indice dans le tableau de structure alien.
     class Check 
     {
 	boolean	hit;
@@ -33,6 +35,7 @@ class Fr extends Program {
 	int[] new_coord = new int[2];
     }
 
+    ///Structure contenant les bonnes et mauvaises reponses avec leur coordonne dans la map
     class Alien 
     {
 	int alien;
@@ -41,7 +44,7 @@ class Fr extends Program {
   
     void algorithm()
     {
-       	menu();
+      	menu();
 	while(finished)
 	    {}
     }
@@ -75,7 +78,7 @@ class Fr extends Program {
     void add_button(String str,int x, int y, int i, int j){
 	if(equals(str,"Math") == true){
 	    addZone(img,str,x,y,i,j);
-	    drawImage(img,Math,x,y);
+	    drawImage(img,math,x,y);
 	}
 	if(equals(str,"Francais") == true){
 	    addZone(img,str,x,y,i,j);
@@ -83,7 +86,7 @@ class Fr extends Program {
 	}
 	if(equals(str,"Histoire") == true){
 	    addZone(img,str,x,y,i,j);
-	    drawImage(img,Hist,x,y);
+	    drawImage(img,hist,x,y);
 	}
     }
 
@@ -97,22 +100,33 @@ class Fr extends Program {
 	finished = true;
 	setColor(img,RGBColor.WHITE);
 	add_question();
-	drawRect(img, 50, 150, 150, 70);       
-	drawRect(img, 250, 150, 150, 70);
-	drawRect(img, 450, 150, 150, 70);
+	drawRect(img, 50, 150, 170, 70);       
+	drawRect(img, 250, 150, 170, 70);
+	drawRect(img, 450, 150, 170, 70);
 	printValue();
 	show(img);
     }
 
+    ///Affichage de la question pour le francais et l'histoire en haut de la fenetre
     void add_question()
     {
-	drawRect(img,140,25,500,50);
+	drawRect(img,140,25,550,50);
 	drawString(img,save[j-1][0],150,50);
+    }
+
+    ///Fonction qui affiche la fin
+    void check_end(){
+	show(vict);
+	drawString(vict,"Félicitation, vous avez gagné",500,200);
+	drawString(vict,"Vie(s) restante(s):",500,300);
+	drawString(vict,toString(lives),640,300);
     }
 
     ///Lancement du mode de jeu Histoire
     void histoire() 
     {
+	if(lives >= 0 && j > 60)
+	    check_end();
 	printHeart();
 	my_pars("Histoire.csv");
 	drawImage(img,wall,0,0);
@@ -141,6 +155,7 @@ class Fr extends Program {
 	drawString(img, save[j - 1][3], 470, 190);
     }
 
+    ///Affichage de la question pour les maths en haut de la fenetre
     void questionMath()
     {
 	setColor(img, RGBColor.GREEN);
@@ -158,25 +173,13 @@ class Fr extends Program {
 	fillRect(img, 0, 0, 600, 300);
 	for (int i = 0; i< my_tab.length; ++i)
 	    my_tab[i] = new Alien();
-	drawImage(img, copyAndResize(vaisseau, "vaisseau-small",70,70), 300, 350);
 	questionMath();
 	my_aff(my_alien());
 	my_answ = fill_tab();
 	show(img);
     }
 
-    void checkFiles()
-    {
-	drawImage(img,wall,0,0);
-	drawImage(img,copyAndResize(logo, "logo",120,100),10,10);
-	addZone(img,"Difficile",200, 200, 200, 100);
-	addZone(img,"Facile",500 , 200, 200, 100);
-	setColor(img, RGBColor.GREEN);
-	drawRect(img, 200, 200, 200, 100);
-	drawRect(img, 500 , 200, 200, 100);
-	drawString(img, "Difficile", 280, 250);
-	drawString(img, "Facile", 590, 250);
-    }
+    
     ///Fonction permettant de remplir toutes les bonnes et mauvaises reponses
     Alien[]		my_alien()
     {
@@ -194,9 +197,10 @@ class Fr extends Program {
 	return my_tab;
     }
 
-    int[]		fill_tab() {
+    ///Fonction qui permet de remplir les cases comportant les bonnes reponses
+    int[]		fill_tab() 
+    {
 	int i = 0;
-	
 	for (int k = 0; k != length(my_tab) ; ++k)
 	    {
 		if (my_tab[k].alien == Integer.parseInt(save[j][l]))
@@ -293,7 +297,7 @@ class Fr extends Program {
 		my_check = check_coord(i, my_check);
 		if (my_check.hit)
 		    {
-			animeTir(0);
+			//animeTir(0);
 			if (my_tab[my_check.numb].alien == Integer.parseInt(save[j][l]))
 			    {
 				setColor(img,RGBColor.BLACK);
@@ -384,6 +388,7 @@ class Fr extends Program {
 	    }
     }
 
+    ///Affichage du coeur avec les vies
     void printHeart()
     {
 	
@@ -519,11 +524,7 @@ class Fr extends Program {
 	return false;
     }
 
-    void	mouseHasMoved(int x, int y) {
-    }
-    void	mouseHasChanged(String name, int x, int y, int button, String event){
-    }
-
+ 
     ///Fonction qui permet de gerer les clics de la souris, avec name = nom de la zone, x et y les coordonnees, button = le nom du boutton utilise avec la souris, et event l'evenement.
     void	mouseChanged(String name, int x, int y, int button, String event) {
 	if (equals(name,"Francais") && button == 1 && event == "PRESSED") 
@@ -550,4 +551,10 @@ class Fr extends Program {
 		maths();
 	    }
 	}
+
+    void	mouseHasMoved(int x, int y) {
+    }
+    void	mouseHasChanged(String name, int x, int y, int button, String event){
+    }
+
 }
